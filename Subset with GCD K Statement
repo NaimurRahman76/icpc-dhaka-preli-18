@@ -1,0 +1,36 @@
+Given a set of N positive distinct integers and a query value K, find if there exists a subset of the integers whose greatest common divisor equals to K.
+
+For example, if the given set is {1, 6, 2, 9, 8}, then the answer for the following values of K are:
+Value of K   	  Existence of Subset   	  Possible Subset  
+1	Yes	{1}
+2	Yes	{2, 6}
+3	Yes	{6, 9}
+4	No	-
+
+Input
+
+The first line contains a single integer N (1 ≤ N ≤ 100000). The next line contains N positive distinct integers separated by whitespace. These N integers represent the set as mentioned above.
+
+The third line contains a single integer Q (1 ≤ Q ≤ 1000). The next line contains Q distinct positive integers, where each integer is a query K.
+
+All values given will be less than or equal to 109.
+
+See sample I/O for more details.
+
+Output
+
+For each query, output int a single line the character “Y” if a subset exists whose GCD equals to K or “N” if not, without the quotes.
+
+See sample I/O for more details.
+
+Sample
+Input
+5
+1 6 2 9 8
+4
+1 2 3 4
+Output
+Y
+Y
+Y
+N
