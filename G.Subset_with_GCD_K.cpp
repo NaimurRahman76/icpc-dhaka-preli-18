@@ -5,7 +5,6 @@ using namespace std;
 
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
-#include<numeric>
 using namespace __gnu_pbds;
 typedef tree<int,null_type,less_equal<int>,rb_tree_tag,tree_order_statistics_node_update> ordered_set;
 
@@ -48,51 +47,71 @@ int go(int base,int po)
     if(po&1)x*=base;
     return (x%mod);
 }
-int gcd(int x,int y)
+vector<int>a(200000),b(100009);
+vector<int>vis(200000);
+void pre()
 {
-    if(x>y)swap(x,y);
-    if(x==0)return y;
-    return gcd(y%x,x);
+    a[1]=0;
+    b[1]=1;
+    for(int i=2; i<=100000; i++)
+    {
+        a[i]=b[i-1]*2;
+        if(i%2)b[i]=a[i]+1;
+        else b[i]=a[i]-1;
+        a[i]%=mod;
+        b[i]%=mod;
+    }
 }
 int32_t main()
 {
     FAST_IO;
     int tt=1,t=0,cnt=1;
-    //cin>>tt;
+    cin>>tt;
+    pre();
     while(tt--)
     {
-        int n;
-        cin>>n;
-        vector<int>v(n);
-        for(int i=0;i<n;i++)cin>>v[i];
-        int q;
-        cin>>q;
-        unordered_map<int,int>dp;
-        while(q--)
+        t++;
+        string s;
+        cin>>s;
+        int n=s.size();
+        int pos=0,cnt=0;
+        while(pos<n&&s[pos]=='W'){
+            cnt++;
+            pos++;
+        }
+        int ans=0;
+        if(cnt)ans=(go(2,cnt-1))%mod;
+        if(cnt==n)ans=(ans* 3)%mod;
+        else if(cnt)ans=((ans*2))%mod;
+        int pos2=n-1;
+        cnt=0;
+        while(pos2>=pos&&s[pos2]=='W'){
+            pos2--;
+            cnt++;
+        }
+        int ans2=1;
+       if(cnt) {
+            ans2=(go(2,cnt))%mod;
+            if(ans==0)ans=1;
+            ans=(ans*ans2)%mod;
+       }
+        cnt=0,ans=max(1ll,ans);
+        for(int i=pos+1;i<=pos2;i++)
         {
-            int x;
-            cin>>x;
-            vector<int>div;
-            bool ok=false;
-            for(int i=0;i<n;i++){
-                if(v[i]%x)continue;
-                div.push_back(v[i]/x);
-            }
-            if(div.size()==0){dp[x]=2;cout<<"N"<<endl;}
+            if(s[i]=='W')cnt++;
             else{
-                    int xx=div[0];
-                for(int i=0;i<div.size();i++)
-                {
-                    xx=gcd(xx,div[i]);
-                    if(xx==1){
-                        ok=true;
-                        //break;
-                    }
-                }
-                if(ok){dp[x]=1;cout<<"Y"<<endl;}
-                else {dp[x]=2;cout<<"N"<<endl;}
+                if(cnt==0)continue;
+                int x=go(2,cnt)%mod;
+                if(s[i]==s[i-cnt-1])x-=a[cnt];
+                else x-=b[cnt];
+                if(x<=0)x+=mod;
+                ans=(ans*x)%mod;
+                cnt=0;
             }
         }
+        cout<<"Case "<<t<<": "<<ans<<endl;
+
+
     }
 
     return 0;
